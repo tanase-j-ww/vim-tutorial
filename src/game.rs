@@ -15,7 +15,6 @@ pub struct VimTutorialGame {
     current_chapter: Option<ChapterData>,
     current_exercise_index: usize,
     current_step_index: usize,
-    user_input_buffer: String,
 }
 
 // デバッグログ用のマクロ
@@ -56,7 +55,6 @@ impl VimTutorialGame {
             current_chapter: None,
             current_exercise_index: 0,
             current_step_index: 0,
-            user_input_buffer: String::new(),
         })
     }
 
@@ -139,7 +137,15 @@ impl VimTutorialGame {
             if self.current_exercise_index >= chapter.exercises.len() {
                 println!("🎉 第{}章「{}」を完了しました！", chapter.chapter.number, chapter.chapter.title);
                 println!("\nお疲れ様でした！");
-                return Ok(());
+                println!("\n他の章も学習してみましょう！");
+                
+                // 章の状態をリセット
+                self.current_chapter = None;
+                self.current_exercise_index = 0;
+                self.current_step_index = 0;
+                
+                // メニューに戻る
+                return self.show_chapter_menu();
             }
             
             let exercise = &chapter.exercises[self.current_exercise_index];
@@ -178,16 +184,21 @@ impl VimTutorialGame {
             );
             println!("💡 解説: {}", step.explanation);
             println!("🎯 期待されるキー入力: {}", step.expected_input);
-            println!();
-            println!("🖥️  tmux分割画面でNeovimを起動します...");
-            println!("下の画面で実際にVim操作を練習してください！");
-            println!();
             
-            // ユーザーからキー入力を受け取る（デモモード確認のため）
-            self.collect_user_input()?;
+            // カーソル位置情報を表示
+            if let Some(cursor_start) = step.cursor_start {
+                println!("📌 開始位置: {}行{}列", cursor_start[0] + 1, cursor_start[1] + 1);
+            }
+            if let Some(cursor_end) = step.cursor_end {
+                println!("🎯 目標位置: {}行{}列", cursor_end[0] + 1, cursor_end[1] + 1);
+            }
+            println!();
+            println!("🚀 tmux分割画面でNeovimを起動します...");
+            println!("上下の画面が表示されます。下の画面で実際にVim操作を練習してください！");
+            println!();
             
             // 直接インタラクティブモードで実行
-            if self.validate_step_input(step)? {
+            if self.run_interactive_neovim(step)? {
                 self.current_step_index += 1;
                 println!("\n--- 次のステップ ---\n");
             }
@@ -196,117 +207,8 @@ impl VimTutorialGame {
         Ok(())
     }
 
-    fn collect_user_input(&mut self) -> Result<()> {
-        print!("入力してください: ");
-        io::stdout().flush()?;
-        
-        let mut input = String::new();
-        match io::stdin().read_line(&mut input) {
-            Ok(0) => {
-                // EOFの場合（標準入力がリダイレクトされている場合）
-                println!("標準入力が利用できません。デモモードで正解を自動入力します。");
-                self.user_input_buffer = "demo".to_string(); // デモフラグ
-            }
-            Ok(_) => {
-                // 改行文字を削除
-                self.user_input_buffer = input.trim().to_string();
-            }
-            Err(e) => {
-                println!("入力エラー: {}. デモモードで正解を自動入力します。", e);
-                self.user_input_buffer = "demo".to_string(); // デモフラグ
-            }
-        }
-        
-        Ok(())
-    }
 
-    fn validate_step_input(&mut self, step: &StepData) -> Result<bool> {
-        // デモモードの場合は自動的に正解を設定
-        if self.user_input_buffer == "demo" {
-            println!("🤖 デモモード: 正解 '{}' を自動入力", step.expected_input);
-            self.user_input_buffer = step.expected_input.clone();
-        }
-        
-        // 常にインタラクティブモード（tmux分割画面）で実行
-        return self.run_interactive_neovim(step);
-    }
 
-    fn validate_with_neovim_step(&self, exercise: &ExerciseData, step: &StepData) -> Result<bool> {
-        // サンプルファイルを作成
-        let sample_content = exercise.sample_code.join("\n");
-        let sample_file = NamedTempFile::new()?;
-        fs::write(&sample_file, sample_content)?;
-
-        // Vimスクリプトを作成
-        let vim_script = format!(r#"
-" ファイルを開く
-edit {}
-
-" 初期位置に移動 (1行目, 1列目)
-normal! gg0
-
-" ユーザーのキー入力をシミュレート
-normal! {}
-
-" 最終カーソル位置を取得
-let final_pos = [line('.'), col('.')]
-call writefile(['FINAL:' . final_pos[0] . ',' . final_pos[1]], '/tmp/vim_validation.txt')
-
-" 終了
-qa!
-"#, sample_file.path().display(), self.user_input_buffer);
-
-        let script_file = NamedTempFile::new()?;
-        fs::write(&script_file, vim_script)?;
-
-        // Neovimでスクリプトを実行
-        let output = Command::new("nvim")
-            .arg("--headless")
-            .arg("-S")
-            .arg(script_file.path())
-            .output()?;
-
-        if !output.status.success() {
-            let stderr = String::from_utf8_lossy(&output.stderr);
-            return Err(anyhow::anyhow!("Neovim実行エラー: {}", stderr));
-        }
-
-        // 結果を確認
-        if let Ok(result_content) = fs::read_to_string("/tmp/vim_validation.txt") {
-            for line in result_content.lines() {
-                if let Some(pos_str) = line.strip_prefix("FINAL:") {
-                    let parts: Vec<&str> = pos_str.split(',').collect();
-                    if parts.len() == 2 {
-                        let row: i32 = parts[0].parse().unwrap_or(0);
-                        let col: i32 = parts[1].parse().unwrap_or(0);
-                        
-                        println!("実際のカーソル位置: {}行{}列", row, col);
-                        
-                        // 期待されるカーソル位置を確認
-                        if let Some(cursor_end) = step.cursor_end {
-                            let expected_row = cursor_end[0] as i32 + 1; // YAMLは0ベース、Vimは1ベース
-                            let expected_col = cursor_end[1] as i32 + 1;
-                            println!("期待されるカーソル位置: {}行{}列", expected_row, expected_col);
-                            
-                            let result = (row, col) == (expected_row, expected_col);
-                            
-                            // クリーンアップ
-                            let _ = fs::remove_file("/tmp/vim_validation.txt");
-                            
-                            return Ok(result);
-                        } else {
-                            // カーソル位置の期待値が設定されていない場合は成功とみなす
-                            println!("カーソル位置チェックをスキップします");
-                            let _ = fs::remove_file("/tmp/vim_validation.txt");
-                            return Ok(true);
-                        }
-                    }
-                }
-            }
-        }
-
-        Err(anyhow::anyhow!("カーソル位置の取得に失敗"))
-    }
 
     fn run_interactive_neovim(&self, step: &StepData) -> Result<bool> {
         if let Some(chapter) = &self.current_chapter {
@@ -343,6 +245,14 @@ qa!
         let status_file = "/tmp/vim_tutorial_status.json";
         debug_log!("状態監視ファイル: {}", status_file);
         
+        // カーソル開始位置を決定
+        let (start_row, start_col) = if let Some(cursor_start) = step.cursor_start {
+            // YAMLは0ベース、Vimは1ベース
+            (cursor_start[0] + 1, cursor_start[1] + 1)
+        } else {
+            (1, 1)  // デフォルトは1行目1列目
+        };
+        
         // Neovim設定スクリプトを作成（状態監視付き）
         let nvim_script = format!(r#"
 " 自動的にカーソル位置を監視（シンプル形式）
@@ -361,12 +271,12 @@ autocmd InsertEnter,InsertLeave * call UpdateStatus()
 " 初期状態を記録
 call UpdateStatus()
 
-" 1行目1列目に移動
-normal! gg0
+" 指定された開始位置に移動（{}行{}列）
+call cursor({}, {})
 
 " 起動完了メッセージ
-echo '🎯 学習開始！目標キー: {}'
-"#, status_file, step.expected_input);
+echo '🎯 学習開始！目標キー: {} | 開始位置: {}行{}列'
+"#, status_file, start_row, start_col, start_row, start_col, step.expected_input, start_row, start_col);
         
         let script_file = NamedTempFile::new()?;
         fs::write(&script_file, nvim_script)?;
@@ -447,15 +357,15 @@ echo '🎯 学習開始！目標キー: {}'
         
         let instruction_command = format!(
             r#"bash -c "clear; echo '=== 🎯 学習目標 ==='; echo '📝 {}'; echo '💡 解説: {}'; echo '🎯 期待キー: {}'; echo ''; echo '=== 📊 カーソル位置監視 ==='; echo '目標位置: {}行{}列'; echo '下のNeovimで操作してください！完了したら :q で終了'; echo ''; echo '📍 現在の状態: 学習中...'; while true; do if [ -f {} ]; then clear; echo '=== 🎯 学習目標 ==='; echo '📝 {}'; echo '💡 解説: {}'; echo '🎯 期待キー: {}'; echo ''; echo '=== 🎉 成功！ ==='; echo '✨ 目標達成しました！{}行{}列に到達！'; echo '素晴らしい！次のステップに進みましょう。'; echo '下のNeovimで :q を入力して終了してください。'; rm {}; sleep 2; break; else sleep 0.2; fi; done""#,
-            step.instruction.replace("'", "\\'").replace("\"", "\\\""), 
-            step.explanation.replace("'", "\\'").replace("\"", "\\\""), 
-            step.expected_input.replace("'", "\\'").replace("\"", "\\\""),
+            step.instruction.replace("'", "'\"'\"'"), 
+            step.explanation.replace("'", "'\"'\"'"), 
+            step.expected_input.replace("'", "'\"'\"'"),
             step.cursor_end.map(|c| c[0] + 1).unwrap_or(1),
             step.cursor_end.map(|c| c[1] + 1).unwrap_or(1),
             success_flag,
-            step.instruction.replace("'", "\\'").replace("\"", "\\\""), 
-            step.explanation.replace("'", "\\'").replace("\"", "\\\""), 
-            step.expected_input.replace("'", "\\'").replace("\"", "\\\""),
+            step.instruction.replace("'", "'\"'\"'"), 
+            step.explanation.replace("'", "'\"'\"'"), 
+            step.expected_input.replace("'", "'\"'\"'"),
             step.cursor_end.map(|c| c[0] + 1).unwrap_or(1),
             step.cursor_end.map(|c| c[1] + 1).unwrap_or(1),
             success_flag
