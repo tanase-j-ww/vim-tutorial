@@ -1,0 +1,73 @@
+# 第8章: 検索・置換 (/, n, N)
+chapter:
+  number: 8
+  title: "検索・置換 (/, n, N)"
+  description: "テキストの検索と置換を学習します"
+  
+exercises:
+  - title: "基本的な検索"
+    description: "/キーで文字列を検索する操作を学習します"
+    sample_code:
+      - "function findTarget() {"
+      - "  let target = 'search_me';"
+      - "  let another_target = 'find_me';"
+      - "  return target;"
+      - "}"
+    
+    steps:
+      - instruction: "/キーを押して検索モードに入ってください"
+        explanation: "/ キー: 前方検索モードに入ります。検索したい文字列を入力できます"
+        expected_input: "/"
+        cursor_start: [0, 0]
+        cursor_end: [0, 0]
+        mode_change: "Command"
+        
+      - instruction: "'target'と入力してEnterを押してください"
+        explanation: "検索したい文字列を入力してEnterで検索を実行します"
+        expected_input: "target\nEnter"
+        cursor_start: [0, 0]
+        cursor_end: [1, 6]
+        mode_change: "Normal"
+        
+      - instruction: "nキーを押して次の検索結果に移動してください"
+        explanation: "n キー: next（次）の検索結果に移動します"
+        expected_input: "n"
+        cursor_start: [1, 6]
+        cursor_end: [2, 16]
+        
+      - instruction: "Nキーを押して前の検索結果に戻ってください"
+        explanation: "N キー: 前の検索結果に戻ります（nの逆方向）"
+        expected_input: "N"
+        cursor_start: [2, 16]
+        cursor_end: [1, 6]
+
+  - title: "実践: コードの中の特定の単語を探す"
+    description: "実際のコードで検索機能を使って効率的に移動します"
+    sample_code:
+      - "class Calculator {"
+      - "  add(a, b) { return a + b; }"
+      - "  subtract(a, b) { return a - b; }"
+      - "  multiply(a, b) { return a * b; }"
+      - "  divide(a, b) { return a / b; }"
+      - "}"
+    
+    steps:
+      - instruction: "'return'という単語を検索してください"
+        explanation: "/でreturnを検索します"
+        expected_input: "/return"
+        cursor_start: [0, 0]
+        cursor_end: [0, 0]
+        mode_change: "Command"
+        
+      - instruction: "Enterを押して検索を実行してください"
+        explanation: "検索を実行して最初のreturnに移動します"
+        expected_input: "Enter"
+        cursor_start: [0, 0]
+        cursor_end: [1, 17]
+        mode_change: "Normal"
+        
+      - instruction: "nを3回押して4つ目のreturnに移動してください"
+        explanation: "nで次の検索結果に順次移動します"
+        expected_input: "nnn"
+        cursor_start: [1, 17]
+        cursor_end: [4, 17]

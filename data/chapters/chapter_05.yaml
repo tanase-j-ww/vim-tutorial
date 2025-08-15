@@ -1,0 +1,60 @@
+# 第5章: 範囲選択 (v, V)
+chapter:
+  number: 5
+  title: "範囲選択 (v, V)"
+  description: "テキストの選択方法を学習します"
+  
+exercises:
+  - title: "文字単位の選択"
+    description: "vキーで文字単位の選択を学習します"
+    sample_code:
+      - "Hello World"
+    
+    steps:
+      - instruction: "vキーを押してVisualモードに入ってください"
+        explanation: "v キー: visual（視覚的）モードで文字単位の選択を開始します"
+        expected_input: "v"
+        cursor_start: [0, 0]
+        cursor_end: [0, 0]
+        mode_change: "Visual"
+        
+      - instruction: "lキーを5回押して'Hello'を選択してください"
+        explanation: "Visualモードでは移動キーで選択範囲を拡張します"
+        expected_input: "lllll"
+        cursor_start: [0, 0]
+        cursor_end: [0, 5]
+        
+      - instruction: "Escキーでノーマルモードに戻ってください"
+        explanation: "Escで選択を解除してノーマルモードに戻ります"
+        expected_input: "Escape"
+        cursor_start: [0, 5]
+        cursor_end: [0, 5]
+        mode_change: "Normal"
+
+  - title: "行単位の選択"
+    description: "Vキーで行単位の選択を学習します"
+    sample_code:
+      - "line 1"
+      - "line 2"
+      - "line 3"
+    
+    steps:
+      - instruction: "Vキーを押して行選択モードに入ってください"
+        explanation: "V キー: 行全体を選択するVisualモードに入ります"
+        expected_input: "V"
+        cursor_start: [0, 0]
+        cursor_end: [0, 0]
+        mode_change: "Visual"
+        
+      - instruction: "jキーを押して2行目まで選択してください"
+        explanation: "行選択モードでは行単位で選択範囲が拡張されます"
+        expected_input: "j"
+        cursor_start: [0, 0]
+        cursor_end: [1, 0]
+        
+      - instruction: "Escキーでノーマルモードに戻ってください"
+        explanation: "選択を解除してノーマルモードに戻ります"
+        expected_input: "Escape"
+        cursor_start: [1, 0]
+        cursor_end: [1, 0]
+        mode_change: "Normal"

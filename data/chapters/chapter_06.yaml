@@ -1,0 +1,80 @@
+# 第6章: 削除・変更 (d, c, x)
+chapter:
+  number: 6
+  title: "削除・変更 (d, c, x)"
+  description: "テキストの削除と変更を学習します"
+  
+exercises:
+  - title: "文字の削除"
+    description: "xキーで文字を削除する基本操作を学習します"
+    sample_code:
+      - "Helllo World"  # 'l'が余分
+    
+    steps:
+      - instruction: "余分な'l'の位置に移動してください"
+        explanation: "llllで4文字右に移動して余分な'l'にカーソルを合わせます"
+        expected_input: "llll"
+        cursor_start: [0, 0]
+        cursor_end: [0, 4]
+        
+      - instruction: "xキーを押して文字を削除してください"
+        explanation: "x キー: カーソル位置の文字を削除します（右の文字を削除）"
+        expected_input: "x"
+        cursor_start: [0, 4]
+        cursor_end: [0, 4]
+        text_change: true
+
+  - title: "行の削除"
+    description: "ddで行全体を削除する操作を学習します"
+    sample_code:
+      - "line 1"
+      - "DELETE ME"  # この行を削除
+      - "line 3"
+    
+    steps:
+      - instruction: "削除したい行（2行目）に移動してください"
+        explanation: "jで下に移動して削除対象の行にカーソルを移動します"
+        expected_input: "j"
+        cursor_start: [0, 0]
+        cursor_end: [1, 0]
+        
+      - instruction: "ddと入力して行を削除してください"
+        explanation: "dd: delete line（行削除）。同じコマンドを2回入力で行全体を操作"
+        expected_input: "dd"
+        cursor_start: [1, 0]
+        cursor_end: [1, 0]
+        text_change: true
+
+  - title: "単語の変更"
+    description: "cwで単語を変更する操作を学習します"
+    sample_code:
+      - "let old_name = 'value';"
+    
+    steps:
+      - instruction: "'old_name'の'o'に移動してください"
+        explanation: "wで次の単語に移動します"
+        expected_input: "w"
+        cursor_start: [0, 0]
+        cursor_end: [0, 4]
+        
+      - instruction: "cwと入力して単語を変更モードにしてください"
+        explanation: "cw: change word（単語変更）。単語を削除してInsertモードに入ります"
+        expected_input: "cw"
+        cursor_start: [0, 4]
+        cursor_end: [0, 4]
+        text_change: true
+        mode_change: "Insert"
+        
+      - instruction: "'new_name'と入力してください"
+        explanation: "新しい単語を入力します"
+        expected_input: "new_name"
+        cursor_start: [0, 4]
+        cursor_end: [0, 12]
+        text_change: true
+        
+      - instruction: "Escでノーマルモードに戻ってください"
+        explanation: "変更を完了してノーマルモードに戻ります"
+        expected_input: "Escape"
+        cursor_start: [0, 12]
+        cursor_end: [0, 11]
+        mode_change: "Normal"

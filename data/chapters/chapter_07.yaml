@@ -1,0 +1,85 @@
+# 第7章: コピー・ペースト (y, p)
+chapter:
+  number: 7
+  title: "コピー・ペースト (y, p)"
+  description: "テキストのコピーとペーストを学習します"
+  
+exercises:
+  - title: "行のコピー"
+    description: "yyで行をコピーしてpでペーストする操作を学習します"
+    sample_code:
+      - "line 1"
+      - "line 2"
+      - "line 3"
+    
+    steps:
+      - instruction: "2行目に移動してください"
+        explanation: "jで下に移動します"
+        expected_input: "j"
+        cursor_start: [0, 0]
+        cursor_end: [1, 0]
+        
+      - instruction: "yyと入力して行をコピーしてください"
+        explanation: "yy: yank line（行コピー）。行全体をクリップボードにコピーします"
+        expected_input: "yy"
+        cursor_start: [1, 0]
+        cursor_end: [1, 0]
+        
+      - instruction: "3行目に移動してください"
+        explanation: "jで下に移動します"
+        expected_input: "j"
+        cursor_start: [1, 0]
+        cursor_end: [2, 0]
+        
+      - instruction: "pキーを押してペーストしてください"
+        explanation: "p キー: put（貼り付け）。コピーした内容をカーソルの後に挿入します"
+        expected_input: "p"
+        cursor_start: [2, 0]
+        cursor_end: [3, 0]
+        text_change: true
+
+  - title: "単語のコピー"
+    description: "ywで単語をコピーしてペーストする操作を学習します"
+    sample_code:
+      - "copy this word here:"
+    
+    steps:
+      - instruction: "'this'の't'に移動してください"
+        explanation: "wで次の単語に移動します"
+        expected_input: "w"
+        cursor_start: [0, 0]
+        cursor_end: [0, 5]
+        
+      - instruction: "ywと入力して単語をコピーしてください"
+        explanation: "yw: yank word（単語コピー）。単語をクリップボードにコピーします"
+        expected_input: "yw"
+        cursor_start: [0, 5]
+        cursor_end: [0, 5]
+        
+      - instruction: "行末に移動してください"
+        explanation: "$で行末に移動します"
+        expected_input: "$"
+        cursor_start: [0, 5]
+        cursor_end: [0, 18]
+        
+      - instruction: "aでInsertモードに入り、スペースを入力してください"
+        explanation: "aで文字の後にInsertモードで入り、スペースを挿入します"
+        expected_input: "a "
+        cursor_start: [0, 18]
+        cursor_end: [0, 20]
+        mode_change: "Insert"
+        text_change: true
+        
+      - instruction: "Escでノーマルモードに戻ってください"
+        explanation: "ノーマルモードに戻ります"
+        expected_input: "Escape"
+        cursor_start: [0, 20]
+        cursor_end: [0, 19]
+        mode_change: "Normal"
+        
+      - instruction: "pでコピーした単語をペーストしてください"
+        explanation: "コピーした'this'をペーストします"
+        expected_input: "p"
+        cursor_start: [0, 19]
+        cursor_end: [0, 23]
+        text_change: true

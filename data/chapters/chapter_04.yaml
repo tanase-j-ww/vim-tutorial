@@ -1,0 +1,57 @@
+# 第4章: 行操作 (0, $, ^)
+chapter:
+  number: 4
+  title: "行操作 (0, $, ^)"
+  description: "行内での移動を学習します"
+  
+exercises:
+  - title: "行内移動の基本"
+    description: "行の開始、終端、最初の非空白文字への移動を学習します"
+    sample_code:
+      - "    let message = 'Hello, World!';"
+    
+    steps:
+      - instruction: "0キーを押して行の先頭に移動してください"
+        explanation: "0 キー: 行の一番左端（インデントも含む）に移動します"
+        expected_input: "0"
+        cursor_start: [0, 10]
+        cursor_end: [0, 0]
+        
+      - instruction: "$キーを押して行の末尾に移動してください"
+        explanation: "$ キー: 行の一番右端（最後の文字）に移動します"
+        expected_input: "$"
+        cursor_start: [0, 0]
+        cursor_end: [0, 34]
+        
+      - instruction: "^キーを押して最初の非空白文字に移動してください"
+        explanation: "^ キー: 行の最初の空白ではない文字（letの'l'）に移動します"
+        expected_input: "^"
+        cursor_start: [0, 34]
+        cursor_end: [0, 4]
+
+  - title: "実践: コードの編集位置に移動"
+    description: "実際のコードで効率的に編集位置に移動します"
+    sample_code:
+      - "function calculateArea(width, height) {"
+      - "    // TODO: 実装する"
+      - "    return width * height;"
+      - "}"
+    
+    steps:
+      - instruction: "2行目のコメント行に移動してください"
+        explanation: "j（下）で2行目に移動します"
+        expected_input: "j"
+        cursor_start: [0, 0]
+        cursor_end: [1, 0]
+        
+      - instruction: "'TODO'という文字の'T'に移動してください"
+        explanation: "^で最初の非空白文字（//の最初の/）に移動し、wで次の単語に移動"
+        expected_input: "^ww"
+        cursor_start: [1, 0]
+        cursor_end: [1, 11]
+        
+      - instruction: "行末のコメント終端に移動してください"
+        explanation: "$で行の最後に移動します"
+        expected_input: "$"
+        cursor_start: [1, 11]
+        cursor_end: [1, 19]

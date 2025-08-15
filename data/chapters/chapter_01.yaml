@@ -1,0 +1,53 @@
+# 第1章: 基本移動 (hjkl)
+chapter:
+  number: 1
+  title: "基本移動 (hjkl)"
+  description: "Vimの基本的なカーソル移動を学習します"
+  
+exercises:
+  - title: "hjkl移動の練習"
+    description: "hjklキーでカーソルを移動させます"
+    sample_code:
+      - "let x = 10;"
+      - "let y = 20;"
+    
+    steps:
+      - instruction: "カーソルを右に移動してください"
+        explanation: "l キー: left の逆で right（右）への移動"
+        expected_input: "l"
+        cursor_start: [0, 0]
+        cursor_end: [0, 1]
+        
+      - instruction: "カーソルを下に移動してください"
+        explanation: "j キー: 下向きの矢印のような形で down（下）への移動"
+        expected_input: "j"
+        cursor_start: [0, 1]
+        cursor_end: [1, 1]
+        
+      - instruction: "カーソルを左に移動してください"
+        explanation: "h キー: アルファベットの左端で left（左）への移動"
+        expected_input: "h"
+        cursor_start: [1, 1]
+        cursor_end: [1, 0]
+        
+      - instruction: "カーソルを上に移動してください"
+        explanation: "k キー: up を連想して up（上）への移動"
+        expected_input: "k"
+        cursor_start: [1, 0]
+        cursor_end: [0, 0]
+
+  - title: "自由移動練習"
+    description: "指定位置まで自由にhjklで移動します"
+    sample_code:
+      - "function example() {"
+      - "  console.log('Hello');"
+      - "  return 42;"
+      - "}"
+    
+    steps:
+      - instruction: "カーソルを2行目の'H'の位置に移動してください"
+        explanation: "複数のキーを組み合わせて目標位置に移動します"
+        expected_input: "jjl"  # 下下右 など複数解答可能
+        cursor_start: [0, 0]
+        cursor_end: [1, 15]
+        target_type: "position"  # position, text, line など

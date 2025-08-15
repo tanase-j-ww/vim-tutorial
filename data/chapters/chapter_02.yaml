@@ -1,0 +1,59 @@
+# 第2章: モード切替 (i, Esc, :)
+chapter:
+  number: 2
+  title: "モード切替 (i, Esc, :)"
+  description: "Vimの各モード間の切り替えを学習します"
+  
+exercises:
+  - title: "Insertモードに入る"
+    description: "ノーマルモードからインサートモードに切り替えます"
+    sample_code:
+      - "hello world"
+    
+    steps:
+      - instruction: "iキーを押してInsertモードに入ってください"
+        explanation: "i キー: insert（挿入）モードに入る。カーソルの現在位置から文字を挿入できます"
+        expected_input: "i"
+        cursor_start: [0, 0]
+        cursor_end: [0, 0]
+        mode_change: "Insert"
+        
+      - instruction: "Escキーを押してNormalモードに戻ってください"
+        explanation: "Esc キー: escape（脱出）でInsertモードから抜けてNormalモードに戻ります"
+        expected_input: "Escape"
+        cursor_start: [0, 0]
+        cursor_end: [0, 0]
+        mode_change: "Normal"
+
+  - title: "文字入力の練習"
+    description: "Insertモードで実際に文字を入力してみます"
+    sample_code:
+      - "let name = '';"
+    
+    steps:
+      - instruction: "カーソルを''の間に移動してください"
+        explanation: "lキーで右に移動して、シングルクォートの間に入ります"
+        expected_input: "lllllllllll"  # 11文字右
+        cursor_start: [0, 0]
+        cursor_end: [0, 11]
+        
+      - instruction: "iキーでInsertモードに入ってください"
+        explanation: "挿入位置でInsertモードに入ります"
+        expected_input: "i"
+        cursor_start: [0, 11]
+        cursor_end: [0, 11]
+        mode_change: "Insert"
+        
+      - instruction: "'Alice'と入力してください"
+        explanation: "Insertモードでは普通に文字を入力できます"
+        expected_input: "Alice"
+        cursor_start: [0, 11]
+        cursor_end: [0, 16]
+        text_change: true
+        
+      - instruction: "Escでノーマルモードに戻ってください"
+        explanation: "編集が終わったらEscでノーマルモードに戻ります"
+        expected_input: "Escape"
+        cursor_start: [0, 16]
+        cursor_end: [0, 15]  # Escで1文字左に戻る
+        mode_change: "Normal"

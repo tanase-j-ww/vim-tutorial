@@ -1,0 +1,56 @@
+# 第3章: 単語操作 (w, b, e)
+chapter:
+  number: 3
+  title: "単語操作 (w, b, e)"
+  description: "単語単位での移動を学習します"
+  
+exercises:
+  - title: "単語移動の基本"
+    description: "単語の境界でカーソルを移動させます"
+    sample_code:
+      - "function calculate_sum(a, b)"
+    
+    steps:
+      - instruction: "wキーを押して次の単語の先頭に移動してください"
+        explanation: "w キー: word（単語）の先頭に移動。次の単語の最初の文字に飛びます"
+        expected_input: "w"
+        cursor_start: [0, 0]
+        cursor_end: [0, 9]
+        
+      - instruction: "eキーを押して単語の末尾に移動してください"
+        explanation: "e キー: end of word（単語の終端）に移動。現在の単語の最後の文字に飛びます"
+        expected_input: "e"
+        cursor_start: [0, 9]
+        cursor_end: [0, 17]
+        
+      - instruction: "bキーを押して前の単語の先頭に移動してください"
+        explanation: "b キー: back to beginning（前の単語の始まり）に戻る移動"
+        expected_input: "b"
+        cursor_start: [0, 17]
+        cursor_end: [0, 9]
+
+  - title: "実践練習: 単語を組み合わせた移動"
+    description: "複数の単語移動を組み合わせて目標位置に移動します"
+    sample_code:
+      - "const API_URL = 'https://api.example.com';"
+      - "const timeout = 5000; // ミリ秒"
+      - "let response = null;"
+    
+    steps:
+      - instruction: "2行目の'timeout'の't'に移動してください"
+        explanation: "j（下）とw（次の単語）を組み合わせて移動します"
+        expected_input: "jw"
+        cursor_start: [0, 0]
+        cursor_end: [1, 6]
+        
+      - instruction: "'5000'の最後の'0'に移動してください"
+        explanation: "w（次の単語）とe（単語の終端）で移動します"
+        expected_input: "wwe"
+        cursor_start: [1, 6]
+        cursor_end: [1, 18]
+        
+      - instruction: "3行目の'response'の'r'に移動してください"
+        explanation: "j（下）とw（次の単語）で移動します"
+        expected_input: "jw"
+        cursor_start: [1, 18]
+        cursor_end: [2, 4]
