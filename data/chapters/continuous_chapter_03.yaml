@@ -1,0 +1,110 @@
+chapter:
+  number: 3
+  title: "テキスト編集 (x, dd, yy, p)"
+  description: "基本的なテキストの削除、コピー、ペースト操作を学習します"
+
+continuous_exercises:
+  - title: "文字と単語の削除"
+    description: "不要な文字を削除してテキストを整理します"
+    sample_code:
+      - "Heelloo Worlld"
+      - "Viim Tutoriaal"
+      - "Practicee Timee"
+    goals:
+      - type: "position"
+        target: [0, 2]
+        description: "1行目の余分な 'e' の位置に移動してください"
+        hint: "ll で右に移動し、余分な 'e' にカーソルを置きます"
+      - type: "position"
+        target: [0, 3]
+        description: "文字を削除してカーソルが次の文字に移動することを確認"
+        hint: "x キーで文字を削除します（カーソルが自動的に右に移動）"
+      - type: "position"
+        target: [0, 6]
+        description: "もう一つの余分な 'o' の位置に移動してください"
+        hint: "lll で右に移動し、余分な 'o' にカーソルを置きます"
+      - type: "position"
+        target: [0, 7]
+        description: "文字を削除してカーソル位置を確認"
+        hint: "x キーで削除します"
+      - type: "position"
+        target: [0, 12]
+        description: "余分な 'l' の位置に移動してください"
+        hint: "lllll で右に移動します"
+      - type: "position"
+        target: [0, 12]
+        description: "文字を削除完了"
+        hint: "x キーで削除します"
+    flow_type: "sequential"
+
+  - title: "行の削除と復元"
+    description: "行全体を削除し、必要に応じて復元します"
+    sample_code:
+      - "let a = 1;"
+      - "// This is a comment"
+      - "let b = 2;"
+      - "// Another comment"  
+      - "let c = 3;"
+    goals:
+      - type: "position"
+        target: [1, 0]
+        description: "コメント行の最初に移動してください"
+        hint: "j キーで2行目に移動します"
+      - type: "position"
+        target: [2, 0]
+        description: "行を削除してカーソルが次の行に移動することを確認"
+        hint: "dd キーで行全体を削除します"
+      - type: "position"
+        target: [3, 0]  
+        description: "もう一つのコメント行に移動してください"
+        hint: "j キーで次のコメント行に移動します"
+      - type: "position"
+        target: [3, 0]
+        description: "この行も削除してください"
+        hint: "dd キーで削除します"
+      - type: "position"
+        target: [1, 0]
+        description: "削除した行を復元してください"
+        hint: "p キーで削除した内容をペーストします"
+    flow_type: "sequential"
+
+  - title: "コピーとペースト"
+    description: "テキストをコピーして別の場所にペーストします"
+    sample_code:
+      - "function hello() {"
+      - "  console.log('Hello');"
+      - "}"
+      - ""
+      - "function goodbye() {"
+      - "  // TODO: Add goodbye message"
+      - "}"
+    goals:
+      - type: "position"
+        target: [1, 0]
+        description: "console.log行の最初に移動してください"
+        hint: "j キーで2行目に移動します"
+      - type: "position"
+        target: [2, 0]
+        description: "行をコピーしてカーソルが次の行に移動することを確認"
+        hint: "yy キーで行をヤンク（コピー）します"
+      - type: "position"
+        target: [5, 0]
+        description: "TODO コメントの行に移動してください"
+        hint: "jjj で3行下に移動します"
+      - type: "position"
+        target: [6, 0]
+        description: "コピーした行をペーストしてください"
+        hint: "p キーでヤンクした内容をペーストします"
+      - type: "position"
+        target: [6, 18]
+        description: "ペーストした行の 'Hello' の 'H' に移動してください"
+        hint: "l キーで右に移動し、'Hello' の開始位置に移動します"
+      - type: "mode"
+        target: "insert"
+        description: "Insert モードに入って 'Hello' を 'Goodbye' に変更してください"
+        hint: "i キーで挿入モード、'Hello' を削除して 'Goodbye' と入力"
+      - type: "mode"
+        target: "normal"
+        description: "編集を完了して Normal モードに戻ってください"
+        hint: "Esc キーで Normal モードに戻ります"
+    flow_type: "sequential"

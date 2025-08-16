@@ -1,0 +1,80 @@
+chapter:
+  number: 1
+  title: "基本移動 (hjkl)"
+  description: "Vimの基本的なカーソル移動を連続して学習します"
+
+continuous_exercises:
+  - title: "hjkl移動の基本"
+    description: "hjklキーを使ってカーソルを自由自在に操作します"
+    sample_code:
+      - "Hello World"
+      - "Vim Tutorial"  
+      - "Practice Time"
+    goals:
+      - type: "position"
+        target: [0, 5]
+        description: "1行目の 'H' から 'W' の位置に移動してください"
+        hint: "l キーを5回押して → → → → → で 'W' の位置へ"
+      - type: "position" 
+        target: [1, 4]
+        description: "2行目の 'V' から 'T' の位置に移動してください"
+        hint: "j キーで下へ ↓、次に h キーで左へ ← で 'T' の位置へ"
+      - type: "position"
+        target: [2, 0]
+        description: "3行目の最初に移動してください (j→hhhh)"
+        hint: "j で下に移動し、h を繰り返して行頭に移動します"
+      - type: "position"
+        target: [0, 0] 
+        description: "1行目の最初に戻ってください (kk)"
+        hint: "k キーを2回押して上に移動します"
+    flow_type: "sequential"
+
+  - title: "効率的な移動パターン"
+    description: "より効率的なカーソル移動のパターンを身につけます"
+    sample_code:
+      - "function example() {"
+      - "  let x = 42;"
+      - "  let y = 100;"
+      - "  return x + y;"
+      - "}"
+    goals:
+      - type: "position"
+        target: [1, 6]
+        description: "2行目の'x'の位置に移動してください"
+        hint: "j で下に移動し、l で右に移動します"
+      - type: "position"
+        target: [3, 9]
+        description: "4行目の'x'の位置に移動してください"
+        hint: "jj で2行下に移動し、ll で右に移動します"
+      - type: "position"  
+        target: [3, 13]
+        description: "同じ行の'y'の位置に移動してください"
+        hint: "l を4回押して右に移動します"
+      - type: "position"
+        target: [4, 0]
+        description: "最後の行の最初に移動してください"
+        hint: "j で下に移動し、h で行頭まで移動します"
+    flow_type: "sequential"
+
+  - title: "自由移動チャレンジ"
+    description: "自分のペースで指定位置まで移動してください"
+    sample_code:
+      - "const name = 'Alice';"
+      - "const age = 25;" 
+      - "const city = 'Tokyo';"
+      - ""
+      - "console.log(name);"
+    goals:
+      - type: "position"
+        target: [0, 13]
+        description: "1行目の'A'の位置に移動してください"
+        hint: "お好きなルートで移動してください (任意の hjkl の組み合わせ)"
+      - type: "position" 
+        target: [2, 13]
+        description: "3行目の'T'の位置に移動してください"
+        hint: "複数の移動方法があります。効率的なルートを見つけてください"
+      - type: "position"
+        target: [4, 12]
+        description: "5行目の'n'の位置に移動してください"  
+        hint: "目標位置まで自由に移動してください"
+    flow_type: "sequential"
